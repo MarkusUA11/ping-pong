@@ -41,15 +41,21 @@ def receive():
 font_win = font.Font(None, 72)
 font_main = font.Font(None, 36)
 # --- ЗОБРАЖЕННЯ ----
-
+paddle_l = transform.scale(image.load('paddle.png').convert_alpha)
+paddle_r= transform.scale(image.load('paddle.png').convert_alpha)
 # --- ЗВУКИ ---
+mixer.init()
 
+mixer_music.load("назва/шлях")
+
+hit_sound = sound("назва/")
 # --- ГРА ---
 game_over = False
 winner = None
 you_winner = None
 my_id, game_state, buffer, client = connect_to_server()
 Thread(target=receive, daemon=True).start()
+mixer_music.play()
 while True:
     for e in event.get():
         if e.type == QUIT:
@@ -89,7 +95,8 @@ while True:
 
     if game_state:
         screen.fill((30, 30, 30))
-        draw.rect(screen, (0, 255, 0), (20, game_state['paddles']['0'], 20, 100))
+        #draw.rect(screen, (0, 255, 0), (20, game_state['paddles']['0'], 20, 100))
+        screen.blit(paddle_l, (20, game_state['paddles'][0]))
         draw.rect(screen, (255, 0, 255), (WIDTH - 40, game_state['paddles']['1'], 20, 100))
         draw.circle(screen, (255, 255, 255), (game_state['ball']['x'], game_state['ball']['y']), 10)
         score_text = font_main.render(f"{game_state['scores'][0]} : {game_state['scores'][1]}", True, (255, 255, 255))
